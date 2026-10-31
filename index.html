@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Briozzo Calzados</title>
+  <meta name="description" content="Catálogo de Briozzo Calzados con stock por talle.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+  <a class="saltar" href="#catalogo">Ir al catálogo</a>
+
+  <p class="aviso-pruebas" id="aviso-pruebas" hidden>Catálogo de prueba: los modelos, precios y talles son ficticios.</p>
+
+  <header class="nav">
+    <a class="marca" href="#inicio" aria-label="Briozzo Calzados, inicio">
+      <span class="monograma" aria-hidden="true">B</span>
+      <span>Briozzo Calzados</span>
+    </a>
+    <nav aria-label="Principal">
+      <a href="#catalogo">Catálogo</a>
+      <a href="#como-comprar">Cómo comprar</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+    <a class="boton boton-linea nav-accion" href="#contacto">Consultar</a>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="hero-texto">
+        <h1>Briozzo Calzados</h1>
+        <p>Mirá los modelos y qué talles quedan antes de venir al local.</p>
+        <div class="hero-acciones">
+          <a class="boton boton-oro" href="#catalogo">Ver catálogo</a>
+          <a class="boton boton-linea" href="#contacto">Consultar por WhatsApp</a>
+        </div>
+      </div>
+      <div class="hero-zapato" id="hero-zapato" aria-hidden="true"></div>
+      <div class="hero-talles">
+        <h2 id="hero-talles-titulo">¿Qué talle buscás?</h2>
+        <div class="tira" id="hero-talles" role="group" aria-labelledby="hero-talles-titulo"></div>
+      </div>
+    </section>
+
+    <section class="seccion" id="catalogo">
+      <div class="catalogo-encabezado">
+        <h2>Catálogo</h2>
+        <div class="resultado-grupo">
+          <p class="resultado" id="resultado" aria-live="polite"></p>
+          <button class="quitar-talle" type="button" id="quitar-talle" hidden>Quitar talle</button>
+        </div>
+      </div>
+
+      <div class="filtros">
+        <div class="categorias" id="categorias" role="group" aria-label="Categoría"></div>
+        <label class="buscar">
+          <span class="visualmente-oculto">Buscar modelo</span>
+          <input type="search" id="buscar" placeholder="Buscar modelo" autocomplete="off">
+        </label>
+        <label class="solo-stock">
+          <input type="checkbox" id="solo-stock">
+          <span>Ocultar agotados</span>
+        </label>
+      </div>
+
+      <ul class="leyenda" aria-label="Referencias de stock">
+        <li><span class="talle-muestra" data-estado="hay">38</span> Hay stock</li>
+        <li><span class="talle-muestra" data-estado="pocos">38</span> Últimos pares</li>
+        <li><span class="talle-muestra" data-estado="agotado">38</span> Agotado</li>
+      </ul>
+
+      <ul class="grilla" id="grilla"></ul>
+
+      <div class="vacio" id="vacio" hidden>
+        <h3>No hay modelos con esos filtros</h3>
+        <p>Probá con otro talle o categoría.</p>
+        <button class="boton boton-linea" type="button" id="limpiar">Quitar filtros</button>
+      </div>
+    </section>
+
+    <section class="seccion" id="como-comprar">
+      <h2>Cómo comprar</h2>
+      <ol class="pasos">
+        <li>
+          <h3>Elegí el modelo</h3>
+          <p>Abrí cualquier calzado del catálogo para ver sus detalles.</p>
+        </li>
+        <li>
+          <h3>Revisá tu talle</h3>
+          <p>Los talles agotados aparecen tachados, así sabés qué hay antes de consultar.</p>
+        </li>
+        <li>
+          <h3>Consultá por WhatsApp</h3>
+          <p>El mensaje se escribe solo, con el modelo y el talle que elegiste.</p>
+        </li>
+      </ol>
+    </section>
+
+    <section class="seccion" id="contacto">
+      <h2>Contacto</h2>
+      <div class="contacto">
+        <div class="contacto-info">
+          <h3>¿Tenés una consulta?</h3>
+          <p>Escribinos y te respondemos por WhatsApp.</p>
+          <dl id="contacto-datos"></dl>
+        </div>
+        <form class="contacto-form" id="contacto-form">
+          <label>
+            <span>Tu nombre</span>
+            <input type="text" name="nombre" required autocomplete="name">
+          </label>
+          <label>
+            <span>Tu consulta</span>
+            <textarea name="consulta" rows="4" required></textarea>
+          </label>
+          <button class="boton boton-oro" type="submit">Enviar por WhatsApp</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="pie">
+    <a class="marca" href="#inicio">
+      <span class="monograma" aria-hidden="true">B</span>
+      <span>Briozzo Calzados</span>
+    </a>
+    <p>© <span id="anio"></span> Briozzo Calzados</p>
+  </footer>
+
+  <dialog class="ficha" id="ficha" aria-labelledby="ficha-nombre">
+    <button class="ficha-cerrar" type="button" id="ficha-cerrar" aria-label="Cerrar">×</button>
+    <div class="ficha-imagen" id="ficha-imagen"></div>
+    <div class="ficha-cuerpo">
+      <p class="ficha-categoria" id="ficha-categoria"></p>
+      <h2 id="ficha-nombre"></h2>
+      <p class="ficha-precio" id="ficha-precio"></p>
+      <p id="ficha-descripcion"></p>
+      <h3 id="ficha-talles-titulo">Elegí tu talle</h3>
+      <div class="tira ficha-talles" id="ficha-talles" role="group" aria-labelledby="ficha-talles-titulo"></div>
+      <p class="ficha-estado" id="ficha-estado" aria-live="polite"></p>
+      <a class="boton boton-oro" id="ficha-whatsapp" target="_blank" rel="noopener">Consultar por WhatsApp</a>
+    </div>
+  </dialog>
+
+  <script src="datos.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
