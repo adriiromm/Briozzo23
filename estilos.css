@@ -527,13 +527,13 @@ body[data-tema="claro"] .marca img { filter: brightness(.5); }
   border-top: 1px solid var(--linea);
   color: var(--suave);
 }
-.pie-contacto { display: grid; justify-items: start; gap: 18px; }
+.pie-contacto { display: grid; gap: 18px; width: fit-content; max-width: 100%; }
 .pie-logo { width: min(26vw, 300px); height: auto; }
 .pie-derechos { grid-column: 1 / -1; text-align: center; font-size: .95rem; }
 .pie-texto { display: grid; gap: 2px; }
 .pie-texto strong { font: 700 1.3rem/1.15 var(--serif); }
 
-.instagram {
+.boton-pie {
   display: flex;
   align-items: center;
   gap: 18px;
@@ -545,13 +545,12 @@ body[data-tema="claro"] .marca img { filter: brightness(.5); }
   text-decoration: none;
   transition: transform .25s ease, box-shadow .25s ease;
 }
-.instagram:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 0 34px rgba(221, 42, 123, .45);
-}
-.instagram strong { color: var(--oro-claro); }
-.instagram-logo { position: relative; flex: none; width: 66px; height: 66px; }
-.instagram-logo::before {
+.boton-pie:hover { transform: translateY(-3px); }
+.boton-pie-instagram:hover { box-shadow: 0 0 34px rgba(221, 42, 123, .45); }
+.boton-pie-local:hover { box-shadow: 0 0 34px rgba(208, 169, 79, .45); }
+.boton-pie strong { color: var(--oro-claro); }
+.boton-pie-icono { position: relative; flex: none; width: 66px; height: 66px; }
+.boton-pie-icono::before {
   content: "";
   position: absolute;
   inset: -6px;
@@ -559,29 +558,26 @@ body[data-tema="claro"] .marca img { filter: brightness(.5); }
   border-radius: 26px;
   animation: latido 2.4s ease-out infinite;
 }
-.instagram-logo img {
+.boton-pie-local .boton-pie-icono::before { animation-delay: 1.2s; }
+.boton-pie-icono img, .boton-pie-icono svg {
   position: relative;
+  display: block;
   width: 100%;
   height: 100%;
   transition: transform .25s ease;
 }
-.instagram:hover .instagram-logo img { transform: rotate(-7deg) scale(1.1); }
+.boton-pie-icono svg {
+  padding: 11px;
+  background: var(--oro);
+  border-radius: 18px;
+  color: var(--negro);
+}
+.boton-pie:hover .boton-pie-icono img,
+.boton-pie:hover .boton-pie-icono svg { transform: rotate(-7deg) scale(1.1); }
 @keyframes latido {
   from { transform: scale(.92); opacity: .9; }
   to { transform: scale(1.24); opacity: 0; }
 }
-
-.local {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding-left: 20px;
-  color: var(--blanco);
-  text-decoration: none;
-}
-.local svg { flex: none; width: 34px; height: 34px; color: var(--oro); }
-.local strong { color: var(--oro-claro); font-size: 1.1rem; }
-.local:hover #pie-direccion { text-decoration: underline; text-underline-offset: 3px; }
 
 /* Ficha del producto */
 .ficha {
@@ -648,5 +644,5 @@ body[data-tema="claro"] .marca img { filter: brightness(.5); }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .telon { display: none; }
-  .instagram-logo::before { animation: none; opacity: .6; }
+  .boton-pie-icono::before { animation: none; opacity: .6; }
 }

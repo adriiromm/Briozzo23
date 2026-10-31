@@ -461,7 +461,7 @@
     $("pie-instagram").setAttribute("aria-label", `Seguinos en Instagram: @${datos.instagram}`);
     $("pie-usuario").textContent = `@${datos.instagram}`;
     $("pie-direccion").textContent = datos.direccion;
-    $("pie-local").href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(datos.direccion)}`;
+    $("pie-local").href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${datos.direccion}, Argentina`)}`;
     $("pie-local").setAttribute("aria-label", `Ver en el mapa: ${datos.direccion}`);
 
     const filas = [["Dirección", datos.direccion], ["Horarios", datos.horarios]].filter(([, valor]) => valor);
