@@ -8,7 +8,6 @@ window.BRIOZZO = {
   direccion: "Aguado 87, Bahía Blanca",
   horarios: "",
   moneda: "$",
-  cursoPrecio: null, // Número, o null para mostrar "Consultanos el valor"
   tipos: ["Zapatillas", "Sandalias", "Stilettos", "Chatitas", "Ojotas"], // Orden del catálogo
   colores: {
     Negro: "#000000",

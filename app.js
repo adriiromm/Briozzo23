@@ -435,9 +435,6 @@
   }
 
   function iniciarCurso() {
-    $("curso-precio").textContent = datos.cursoPrecio == null
-      ? "Consultanos el valor"
-      : `${datos.moneda} ${datos.cursoPrecio.toLocaleString("es-AR")}`;
     $("curso-consultar").href = enlaceWhatsApp("Hola, quiero consultar por el curso de confección de calzado.");
   }
 
