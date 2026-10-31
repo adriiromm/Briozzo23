@@ -4,7 +4,8 @@
 // luz: color del brillo de fondo en la vitrina.
 window.BRIOZZO = {
   whatsapp: "", // Solo números, con código de país. Ejemplo: "5491112345678"
-  direccion: "",
+  instagram: "briozzocalzados", // Solo el usuario, sin @
+  direccion: "Aguado 87",
   horarios: "",
   moneda: "$",
   colores: {

@@ -529,6 +529,18 @@ body[data-tema="claro"] .marca img { filter: brightness(.5); }
   text-align: center;
 }
 .pie img { width: min(70vw, 300px); height: auto; }
+.pie-datos {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px clamp(48px, 9vw, 110px);
+  margin-top: 12px;
+}
+.pie-datos h2 { font: 700 1.25rem/1.2 var(--serif); color: var(--titulo); margin-bottom: 4px; }
+.pie-datos p, .pie-datos a { color: var(--texto); }
+.pie-datos a { text-underline-offset: 3px; }
+.pie-datos a:hover { color: var(--oro-claro); }
+.pie-derechos { margin-top: 12px; font-size: .95rem; }
 
 /* Ficha del producto */
 .ficha {

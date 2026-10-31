@@ -457,6 +457,10 @@
 
   // Contacto
   function iniciarContacto() {
+    $("pie-instagram").href = `https://www.instagram.com/${encodeURIComponent(datos.instagram)}/`;
+    $("pie-instagram").textContent = `@${datos.instagram}`;
+    $("pie-direccion").textContent = datos.direccion;
+
     const filas = [["Dirección", datos.direccion], ["Horarios", datos.horarios]].filter(([, valor]) => valor);
     filas.forEach(([titulo, valor]) => {
       const dt = document.createElement("dt");
