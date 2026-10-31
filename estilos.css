@@ -25,13 +25,13 @@
 }
 
 body[data-tema="claro"] {
-  --fondo: var(--blanco);
+  --fondo: #e6e0d4;
   --texto: var(--negro);
-  --suave: #5a5345;
-  --linea: #e2dac6;
-  --panel: #f7f3e8;
-  --titulo: var(--oro-oscuro);
-  --velo: rgba(255, 255, 255, .78);
+  --suave: #4c4639;
+  --linea: #cdc3ad;
+  --panel: #f1ece1;
+  --titulo: #6f5213;
+  --velo: rgba(230, 224, 212, .82);
 }
 
 * { box-sizing: border-box; }
@@ -116,7 +116,7 @@ button, input, textarea { font: inherit; color: inherit; }
 
 .marca { display: inline-flex; }
 .marca img { height: 46px; width: auto; }
-body[data-tema="claro"] .marca img { filter: brightness(.8); }
+body[data-tema="claro"] .marca img { filter: brightness(.6); }
 
 .boton {
   display: inline-block;
