@@ -478,6 +478,7 @@ body[data-tema="claro"] .marca img { filter: brightness(.5); }
   color: var(--titulo);
   transition: color .6s ease;
 }
+.cursos-lateral { display: grid; gap: 14px; }
 .cursos-datos {
   display: grid;
   gap: 8px;
@@ -489,7 +490,7 @@ body[data-tema="claro"] .marca img { filter: brightness(.5); }
 }
 .cursos-datos h3 { font: 700 1.3rem/1.2 var(--serif); }
 .cursos-datos h3:not(:first-child) { margin-top: 16px; }
-.cursos-notas { display: grid; gap: 4px; color: var(--suave); font-size: 1rem; }
+.cursos-notas { display: grid; gap: 4px; padding: 0 4px; color: var(--suave); font-size: 1rem; }
 .cursos-horarios { display: grid; }
 .cursos-horarios div {
   display: flex;
