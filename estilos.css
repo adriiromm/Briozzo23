@@ -114,15 +114,9 @@ button, input, textarea { font: inherit; color: inherit; }
 .nav nav a { text-decoration: none; color: var(--suave); font-weight: 500; }
 .nav nav a:hover { color: var(--titulo); }
 
-.marca {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-  font: 700 1.15rem/1 var(--serif);
-}
-.marca img { height: 44px; width: auto; }
-body[data-tema="claro"] .marca img { filter: brightness(.5); }
+.marca { display: inline-flex; }
+.marca img { height: 46px; width: auto; }
+body[data-tema="claro"] .marca img { filter: brightness(.8); }
 
 .boton {
   display: inline-block;
