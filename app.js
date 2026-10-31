@@ -139,7 +139,10 @@
     $("vitrina-siguiente").addEventListener("click", () => mover(1));
     $("vitrina-ver").addEventListener("click", () => abrirFicha(productos[frente]));
 
-    new IntersectionObserver(([e]) => { enPantalla = e.isIntersecting; }).observe(escena);
+    new IntersectionObserver(([e]) => {
+      enPantalla = e.isIntersecting;
+      if (enPantalla) colocar();
+    }).observe(escena);
     addEventListener("resize", colocar);
 
     colocar();
@@ -427,11 +430,37 @@
     }
   }
 
-  // La página pasa a blanco en "Cursos de confección" y "Cómo comprar".
-  function iniciarTema() {
-    new IntersectionObserver(([e]) => {
-      document.body.dataset.tema = e.isIntersecting ? "claro" : "oscuro";
-    }, { rootMargin: "-45% 0px -45% 0px" }).observe($("zona-clara"));
+  // Cada apartado es una página: el menú queda fijo y cambia todo el contenido.
+  function iniciarPaginas() {
+    const paginas = [...document.querySelectorAll("main > section")];
+    const claras = ["cursos", "como-comprar"];
+    let primeraVez = true;
+
+    function mostrar() {
+      const pedida = location.hash.slice(1);
+      const actual = paginas.find((p) => p.id === pedida) || paginas[0];
+
+      paginas.forEach((p) => { p.hidden = p !== actual; });
+      document.body.dataset.tema = claras.includes(actual.id) ? "claro" : "oscuro";
+      document.querySelectorAll(".nav nav a").forEach((a) => {
+        if (a.hash === `#${actual.id}`) a.setAttribute("aria-current", "page");
+        else a.removeAttribute("aria-current");
+      });
+
+      const titulo = actual.querySelector("h2");
+      document.title = actual === paginas[0] ? "Briozzo Calzados" : `${titulo.textContent} | Briozzo Calzados`;
+      scrollTo({ top: 0, behavior: "instant" });
+
+      if (!primeraVez) {
+        const destino = actual === paginas[0] ? $("escena") : titulo;
+        if (actual !== paginas[0]) titulo.tabIndex = -1;
+        destino.focus({ preventScroll: true });
+      }
+      primeraVez = false;
+    }
+
+    addEventListener("hashchange", mostrar);
+    mostrar();
   }
 
   function iniciarCurso() {
@@ -467,7 +496,7 @@
   $("anio").textContent = new Date().getFullYear();
   iniciarFiltros();
   iniciarFicha();
-  iniciarTema();
+  iniciarPaginas();
   iniciarCurso();
   iniciarContacto();
   pintarCatalogo();

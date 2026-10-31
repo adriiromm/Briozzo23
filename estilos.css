@@ -45,10 +45,15 @@ body {
   background: var(--fondo);
   color: var(--texto);
   font: 400 1.0625rem/1.55 var(--sans);
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
   overflow-x: hidden;
-  transition: background-color .6s ease, color .6s ease;
+  transition: background-color .2s ease, color .2s ease;
 }
 
+main { flex: 1; width: 100%; }
+h2:focus { outline: none; }
 h1, h2, h3, p, ul, ol, dl, dd { margin: 0; padding: 0; }
 ul, ol { list-style: none; }
 a { color: inherit; }
@@ -109,11 +114,18 @@ button, input, textarea { font: inherit; color: inherit; }
   background: var(--velo);
   backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--linea);
-  transition: background-color .6s ease, border-color .6s ease;
+  transition: background-color .2s ease, border-color .2s ease;
 }
 .nav nav { display: flex; gap: 28px; margin-left: auto; }
 .nav nav a { text-decoration: none; color: var(--suave); font-weight: 500; }
 .nav nav a:hover { color: var(--titulo); }
+.nav nav a[aria-current="page"] {
+  color: var(--titulo);
+  text-decoration: underline;
+  text-decoration-color: var(--oro);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+}
 
 .marca { display: inline-flex; }
 .marca img { height: 46px; width: auto; }
@@ -240,7 +252,7 @@ body[data-tema="claro"] .marca img { filter: brightness(.6); }
 .seccion > h2, .catalogo-encabezado h2 {
   font: 700 clamp(2.4rem, 5vw, 3.8rem)/1.05 var(--serif);
   color: var(--titulo);
-  transition: color .6s ease;
+  transition: color .2s ease;
 }
 .catalogo-encabezado {
   display: flex;
@@ -435,7 +447,6 @@ body[data-tema="claro"] .marca img { filter: brightness(.6); }
 .vacio p { margin: 6px 0 18px; color: var(--suave); }
 
 /* Pasos */
-#como-comprar { padding-top: 56px; padding-bottom: 72px; }
 .pasos {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -450,13 +461,12 @@ body[data-tema="claro"] .marca img { filter: brightness(.6); }
   font: 700 clamp(3rem, 6vw, 4.6rem)/1 var(--serif);
   color: var(--titulo);
   margin-bottom: 14px;
-  transition: color .6s ease;
+  transition: color .2s ease;
 }
 .pasos h3 { font: 700 1.4rem/1.2 var(--serif); margin-bottom: 6px; }
 .pasos p { color: var(--suave); }
 
 /* Cursos de confección */
-#cursos { padding-top: 120px; padding-bottom: 40px; }
 .cursos {
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
@@ -471,7 +481,7 @@ body[data-tema="claro"] .marca img { filter: brightness(.6); }
   border-top: 2px solid var(--oro);
   font: 700 clamp(1.35rem, 2.4vw, 1.75rem)/1.25 var(--serif);
   color: var(--titulo);
-  transition: color .6s ease;
+  transition: color .2s ease;
 }
 .cursos-lateral { display: grid; gap: 14px; }
 .cursos-datos {
@@ -481,7 +491,7 @@ body[data-tema="claro"] .marca img { filter: brightness(.6); }
   background: var(--panel);
   border: 1px solid var(--linea);
   border-radius: 16px;
-  transition: background-color .6s ease, border-color .6s ease;
+  transition: background-color .2s ease, border-color .2s ease;
 }
 .cursos-datos h3 { font: 700 1.3rem/1.2 var(--serif); }
 .cursos-datos h3:not(:first-child) { margin-top: 16px; }
@@ -629,14 +639,35 @@ body[data-tema="claro"] .marca img { filter: brightness(.6); }
 }
 
 @media (max-width: 860px) {
-  .nav nav { display: none; }
+  /* En celular el menú es una barra fija abajo, como en la app de Instagram */
+  body { padding-bottom: 58px; }
+  .nav { background: var(--fondo); backdrop-filter: none; }
+  .nav nav {
+    position: fixed;
+    inset: auto 0 0 0;
+    z-index: 20;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0;
+    margin: 0;
+    padding-bottom: env(safe-area-inset-bottom);
+    background: var(--fondo);
+    border-top: 1px solid var(--linea);
+  }
+  .nav nav a {
+    display: grid;
+    place-items: center;
+    min-height: 58px;
+    padding: 4px 2px;
+    font-size: .82rem;
+    line-height: 1.15;
+    text-align: center;
+  }
   .escena { --carta: clamp(170px, min(52vw, 36svh), 300px); perspective: 900px; }
   .grilla { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
   .tarjeta-texto { padding: 10px 12px 12px; }
   .tarjeta-nombre { font-size: 1.05rem; }
   .pasos, .contacto, .cursos { grid-template-columns: minmax(0, 1fr); }
-  #cursos { padding-top: 72px; padding-bottom: 32px; }
-  #como-comprar { padding-top: 40px; padding-bottom: 56px; }
   .buscar { margin-left: 0; flex: 1 1 100%; }
   .buscar input { width: 100%; }
   .ficha[open] { grid-template-columns: minmax(0, 1fr); }
