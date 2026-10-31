@@ -1,20 +1,30 @@
 // Datos del negocio y del catálogo.
-// Estado de cada talle: "hay", "pocos" o "agotado". La parte pública nunca recibe cantidades exactas.
-// Para usar una foto real, agregá foto: "fotos/nombre.jpg" al producto.
+// precio: número, o null para mostrar "Consultar precio".
+// talles: { 38: "hay", 39: "pocos", 40: "agotado" }. Vacío mientras no estén cargados.
+// luz: color del brillo de fondo en la vitrina.
 window.BRIOZZO = {
-  pruebas: true, // Muestra el aviso de datos de prueba. Pasar a false con el catálogo real.
   whatsapp: "", // Solo números, con código de país. Ejemplo: "5491112345678"
   direccion: "",
   horarios: "",
   moneda: "$",
+  colores: {
+    Negro: "#000000",
+    Blanco: "#ffffff",
+    Dorado: "#d0a94f",
+    Plateado: "#c4c7cc",
+    Rosa: "#d9608a",
+    Nude: "#d9a988"
+  },
   productos: [
-    { id: "prueba-1", nombre: "Modelo de prueba 1", categoria: "Hombre", tipo: "zapato", precio: 89900, descripcion: "Producto ficticio para probar la página.", talles: { 40: "hay", 41: "pocos", 42: "hay", 43: "agotado", 44: "hay" } },
-    { id: "prueba-2", nombre: "Modelo de prueba 2", categoria: "Hombre", tipo: "bota", precio: 124900, descripcion: "Producto ficticio para probar la página.", talles: { 40: "agotado", 41: "hay", 42: "pocos", 43: "hay", 44: "agotado" } },
-    { id: "prueba-3", nombre: "Modelo de prueba 3", categoria: "Hombre", tipo: "zapatilla", precio: 74900, descripcion: "Producto ficticio para probar la página.", talles: { 39: "hay", 40: "hay", 41: "hay", 42: "pocos", 43: "pocos" } },
-    { id: "prueba-4", nombre: "Modelo de prueba 4", categoria: "Mujer", tipo: "sandalia", precio: 69900, descripcion: "Producto ficticio para probar la página.", talles: { 35: "pocos", 36: "hay", 37: "hay", 38: "agotado", 39: "hay" } },
-    { id: "prueba-5", nombre: "Modelo de prueba 5", categoria: "Mujer", tipo: "bota", precio: 134900, descripcion: "Producto ficticio para probar la página.", talles: { 36: "hay", 37: "pocos", 38: "hay", 39: "hay", 40: "agotado" } },
-    { id: "prueba-6", nombre: "Modelo de prueba 6", categoria: "Mujer", tipo: "zapatilla", precio: 79900, descripcion: "Producto ficticio para probar la página.", talles: { 35: "hay", 36: "hay", 37: "agotado", 38: "pocos", 39: "hay", 40: "hay" } },
-    { id: "prueba-7", nombre: "Modelo de prueba 7", categoria: "Mujer", tipo: "zapato", precio: null, descripcion: "Producto ficticio para probar la página, sin precio publicado.", talles: { 36: "agotado", 37: "agotado", 38: "agotado", 39: "agotado" } },
-    { id: "prueba-8", nombre: "Modelo de prueba 8", categoria: "Hombre", tipo: "zapato", precio: 99900, descripcion: "Producto ficticio para probar la página.", talles: { 41: "pocos", 42: "hay", 43: "hay", 44: "pocos", 45: "hay" } }
+    { id: "zapatillas-negras-amarillas", nombre: "Zapatillas negras y amarillas", tipo: "Zapatillas", colores: ["Negro"], foto: "fotos/zapatillas-negras-amarillas.jpg", luz: "#7a6614", precio: null, talles: {} },
+    { id: "sandalias-cobre-negras", nombre: "Sandalias cobre y negras", tipo: "Sandalias", colores: ["Dorado", "Negro"], foto: "fotos/sandalias-cobre-negras.jpg", luz: "#8a5a1e", precio: null, talles: {} },
+    { id: "zapatillas-blancas-rosa", nombre: "Zapatillas blancas y rosa", tipo: "Zapatillas", colores: ["Blanco", "Rosa"], foto: "fotos/zapatillas-blancas-rosa.jpg", luz: "#8a4a5c", precio: null, talles: {} },
+    { id: "ojotas-negras-strass", nombre: "Ojotas negras con strass", tipo: "Ojotas", colores: ["Negro"], foto: "fotos/ojotas-negras-strass.jpg", luz: "#5a4a30", precio: null, talles: {} },
+    { id: "sandalias-amarillas-fucsia", nombre: "Sandalias amarillas y fucsia", tipo: "Sandalias", colores: ["Rosa"], foto: "fotos/sandalias-amarillas-fucsia.jpg", luz: "#8a2a5a", precio: null, talles: {} },
+    { id: "chatitas-nude", nombre: "Chatitas nude", tipo: "Chatitas", colores: ["Nude"], foto: "fotos/chatitas-nude.jpg", luz: "#8a5a3a", precio: null, talles: {} },
+    { id: "zapatillas-negras-rosa", nombre: "Zapatillas negras y rosa", tipo: "Zapatillas", colores: ["Negro", "Rosa"], foto: "fotos/zapatillas-negras-rosa.jpg", luz: "#7a3a50", precio: null, talles: {} },
+    { id: "sandalias-plateadas", nombre: "Sandalias plateadas", tipo: "Sandalias", colores: ["Plateado"], foto: "fotos/sandalias-plateadas.jpg", luz: "#5a5c62", precio: null, talles: {} },
+    { id: "stilettos-blancos-strass", nombre: "Stilettos blancos con strass", tipo: "Stilettos", colores: ["Blanco"], foto: "fotos/stilettos-blancos-strass.jpg", luz: "#7a6a58", precio: null, talles: {} },
+    { id: "sandalias-cobre-beige", nombre: "Sandalias cobre y beige", tipo: "Sandalias", colores: ["Dorado", "Nude"], foto: "fotos/sandalias-cobre-beige.jpg", luz: "#8a5226", precio: null, talles: {} }
   ]
 };

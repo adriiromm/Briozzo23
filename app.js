@@ -2,77 +2,10 @@
   const datos = window.BRIOZZO;
   const productos = datos.productos;
   const $ = (id) => document.getElementById(id);
+  const movimientoReducido = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const punteroFino = matchMedia("(hover: hover) and (pointer: fine)").matches;
 
   const ETIQUETA_ESTADO = { hay: "hay stock", pocos: "últimos pares", agotado: "agotado" };
-
-  // Siluetas de línea que se usan mientras un producto no tiene foto.
-  const SILUETAS = {
-    zapato: {
-      caja: "0 0 640 300",
-      trazos: [
-        "M58 226 C50 190 54 140 62 104 C65 92 76 86 90 86 C118 88 150 88 176 84 C186 83 192 90 198 100 C214 128 248 146 290 160 C350 180 420 188 486 198 C540 206 588 216 596 244 L58 226 Z",
-        "M50 226 L596 244 C604 256 596 266 578 266 L346 266 C314 266 298 252 268 250 L200 248 L200 272 L64 272 C54 272 48 264 50 254 Z"
-      ],
-      detalles: [
-        "M198 100 C196 134 214 176 262 212 M290 160 C282 180 276 196 262 212 M262 212 C330 226 430 232 596 244",
-        "M224 124 L256 104 M244 138 L276 118 M266 150 L298 130 M290 160 L322 140"
-      ]
-    },
-    bota: {
-      caja: "0 0 640 400",
-      trazos: [
-        "M94 318 C90 240 96 130 92 40 C92 28 100 22 112 22 L270 22 C282 22 288 30 288 42 C288 110 288 170 300 206 C316 240 370 256 440 270 C510 284 572 296 586 334 L94 318 Z",
-        "M86 318 L586 334 C594 346 586 356 568 356 L346 356 C316 356 300 342 272 340 L216 338 L216 368 L100 368 C90 368 84 360 86 350 Z"
-      ],
-      detalles: [
-        "M92 62 L288 62",
-        "M216 62 C210 130 214 200 240 250 C256 280 262 300 268 326",
-        "M300 206 C290 240 280 280 268 326"
-      ]
-    },
-    zapatilla: {
-      caja: "0 0 640 300",
-      trazos: [
-        "M60 214 C52 176 56 130 66 98 C72 84 88 80 100 88 C116 100 142 104 170 90 C180 84 190 88 198 98 C226 134 268 148 322 164 C392 182 452 170 518 186 C560 196 590 210 592 232 L60 214 Z",
-        "M50 214 L594 232 C606 244 602 274 574 274 L80 268 C52 266 42 240 50 214 Z"
-      ],
-      detalles: [
-        "M44 240 L602 254",
-        "M236 134 L268 106 M260 148 L292 120 M286 158 L318 130 M312 164 L344 138",
-        "M150 216 C210 180 260 170 300 168 C350 170 400 200 440 222"
-      ]
-    },
-    sandalia: {
-      caja: "0 0 640 340",
-      trazos: [
-        "M92 226 C120 214 180 216 260 236 C340 256 430 262 560 256 C590 256 604 268 596 280 C590 288 576 290 560 290 C440 294 340 288 270 264 C210 244 150 238 118 244 C100 248 88 238 92 226 Z",
-        "M118 244 L96 318 L142 318 C146 288 168 262 198 244"
-      ],
-      detalles: [
-        "M400 262 C420 214 480 210 520 258",
-        "M452 260 C462 232 500 232 540 258",
-        "M200 226 C200 170 180 130 130 108 C112 100 108 76 128 72 C166 66 216 96 240 150 C252 180 256 212 260 236"
-      ]
-    }
-  };
-
-  function silueta(tipo, conClases) {
-    const s = SILUETAS[tipo] || SILUETAS.zapato;
-    const claseTrazo = conClases ? ' class="trazo"' : "";
-    const claseDetalle = conClases ? ' class="trazo trazo-detalle"' : "";
-    const trazos = s.trazos.map((d) => `<path${claseTrazo} pathLength="1" d="${d}"/>`).join("");
-    const detalles = s.detalles.map((d) => `<path${claseDetalle} pathLength="1" d="${d}" stroke-width="1.5"/>`).join("");
-    return `<svg viewBox="${s.caja}" fill="none" stroke="#d0a94f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${trazos}${detalles}</svg>`;
-  }
-
-  function imagen(p) {
-    if (!p.foto) return silueta(p.tipo);
-    const img = document.createElement("img");
-    img.src = p.foto;
-    img.alt = p.nombre;
-    img.loading = "lazy";
-    return img.outerHTML;
-  }
 
   function precio(p) {
     if (p.precio == null) return "Consultar precio";
@@ -80,20 +13,150 @@
   }
 
   const tallesDe = (p) => Object.keys(p.talles).map(Number).sort((a, b) => a - b);
-  const tieneStock = (p) => Object.values(p.talles).some((e) => e !== "agotado");
+  const tieneTalles = (p) => tallesDe(p).length > 0;
+  const estaAgotado = (p) => tieneTalles(p) && Object.values(p.talles).every((e) => e === "agotado");
+  const hayTallesCargados = productos.some(tieneTalles);
 
   function enlaceWhatsApp(mensaje) {
     const texto = encodeURIComponent(mensaje);
     return datos.whatsapp ? `https://wa.me/${datos.whatsapp}?text=${texto}` : `https://wa.me/?text=${texto}`;
   }
 
+  // Morfa la foto entre la grilla y la ficha cuando el navegador lo permite.
+  function transicion(cambio) {
+    if (!document.startViewTransition || movimientoReducido) { cambio(); return; }
+    document.startViewTransition(cambio);
+  }
+
+  // Vitrina giratoria
+  const vitrina = (function () {
+    const escena = $("escena");
+    const anillo = $("anillo");
+    const paso = 360 / productos.length;
+    let angulo = 0;
+    let objetivo = 0;
+    let radio = 0;
+    let frente = -1;
+    let enPantalla = true;
+    let quietoHasta = 0;
+
+    const cartas = productos.map((p) => {
+      const carta = document.createElement("div");
+      carta.className = "carta";
+      const img = document.createElement("img");
+      img.src = p.foto;
+      img.alt = "";
+      img.draggable = false;
+      carta.append(img);
+      anillo.append(carta);
+      return carta;
+    });
+
+    function colocar() {
+      const ancho = cartas[0].offsetWidth;
+      radio = Math.round((ancho / 2 / Math.tan(Math.PI / productos.length)) * 1.14);
+      cartas.forEach((c, i) => { c.style.transform = `rotateY(${i * paso}deg) translateZ(${radio}px)`; });
+    }
+
+    const indiceDelFrente = () => {
+      const i = Math.round(-angulo / paso) % productos.length;
+      return (i + productos.length) % productos.length;
+    };
+
+    function pintar() {
+      anillo.style.transform = `translateZ(${-radio}px) rotateY(${angulo}deg)`;
+      cartas.forEach((c, i) => {
+        const cercania = Math.max(0, Math.cos(((i * paso + angulo) * Math.PI) / 180));
+        c.style.filter = `brightness(${(0.22 + 0.78 * cercania ** 2).toFixed(3)})`;
+      });
+      const actual = indiceDelFrente();
+      if (actual !== frente) {
+        frente = actual;
+        $("vitrina-nombre").textContent = productos[frente].nombre;
+        $("vitrina-luz").style.setProperty("--luz", productos[frente].luz);
+      }
+    }
+
+    function cuadro(ahora) {
+      if (enPantalla) {
+        if (!movimientoReducido && ahora > quietoHasta) objetivo -= 0.05;
+        angulo += (objetivo - angulo) * 0.09;
+        pintar();
+      }
+      requestAnimationFrame(cuadro);
+    }
+
+    function detener(ms) { quietoHasta = performance.now() + ms; }
+    function alinear() { objetivo = Math.round(objetivo / paso) * paso; }
+    function mover(cantidad) { detener(7000); alinear(); objetivo -= cantidad * paso; }
+
+    function irA(i) {
+      detener(7000);
+      const destino = -i * paso;
+      const vueltas = Math.round((objetivo - destino) / 360);
+      objetivo = destino + vueltas * 360;
+    }
+
+    // Arrastre con mouse o dedo
+    let inicio = null;
+    escena.addEventListener("pointerdown", (e) => {
+      inicio = { x: e.clientX, y: e.clientY, ultimo: e.clientX, movido: false };
+      escena.setPointerCapture(e.pointerId);
+      detener(7000);
+    });
+    escena.addEventListener("pointermove", (e) => {
+      if (!inicio) return;
+      const dx = e.clientX - inicio.ultimo;
+      inicio.ultimo = e.clientX;
+      if (Math.abs(e.clientX - inicio.x) > 6) inicio.movido = true;
+      objetivo += dx * 0.22;
+      detener(7000);
+    });
+    function soltar(e) {
+      if (!inicio) return;
+      const fueClic = !inicio.movido;
+      inicio = null;
+      if (!fueClic) { alinear(); return; }
+      if (e.type !== "pointerup") return;
+      const elemento = document.elementFromPoint(e.clientX, e.clientY);
+      const carta = elemento && elemento.closest(".carta");
+      if (!carta) return;
+      const i = cartas.indexOf(carta);
+      if (i === frente) abrirFicha(productos[i]);
+      else irA(i);
+    }
+    escena.addEventListener("pointerup", soltar);
+    escena.addEventListener("pointercancel", soltar);
+
+    escena.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") { mover(-1); e.preventDefault(); }
+      if (e.key === "ArrowRight") { mover(1); e.preventDefault(); }
+      if (e.key === "Enter") abrirFicha(productos[frente]);
+    });
+    escena.addEventListener("focus", () => detener(60000));
+
+    $("vitrina-anterior").addEventListener("click", () => mover(-1));
+    $("vitrina-siguiente").addEventListener("click", () => mover(1));
+    $("vitrina-ver").addEventListener("click", () => abrirFicha(productos[frente]));
+
+    new IntersectionObserver(([e]) => { enPantalla = e.isIntersecting; }).observe(escena);
+    addEventListener("resize", colocar);
+
+    colocar();
+    pintar();
+    requestAnimationFrame(cuadro);
+    return { detener };
+  })();
+
   // Catálogo y filtros
-  const filtro = { categoria: "Todos", talle: null, texto: "", soloStock: false };
+  const FILTRO_INICIAL = { tipo: "Todos", color: null, talle: null, texto: "", soloStock: false };
+  const filtro = { ...FILTRO_INICIAL };
 
   function coincide(p) {
-    if (filtro.categoria !== "Todos" && p.categoria !== filtro.categoria) return false;
+    if (filtro.tipo !== "Todos" && p.tipo !== filtro.tipo) return false;
+    if (filtro.color && !p.colores.includes(filtro.color)) return false;
     if (filtro.texto && !p.nombre.toLowerCase().includes(filtro.texto)) return false;
-    if (filtro.soloStock && !tieneStock(p)) return false;
+    if (filtro.soloStock && estaAgotado(p)) return false;
     if (filtro.talle !== null) {
       const estado = p.talles[filtro.talle];
       if (!estado || estado === "agotado") return false;
@@ -101,57 +164,74 @@
     return true;
   }
 
+  function inclinar(tarjeta) {
+    if (!punteroFino) return;
+    tarjeta.addEventListener("pointermove", (e) => {
+      const r = tarjeta.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width;
+      const y = (e.clientY - r.top) / r.height;
+      tarjeta.style.setProperty("--ry", `${(x - 0.5) * 9}deg`);
+      tarjeta.style.setProperty("--rx", `${(0.5 - y) * 9}deg`);
+      tarjeta.style.setProperty("--mx", `${x * 100}%`);
+      tarjeta.style.setProperty("--my", `${y * 100}%`);
+    });
+    tarjeta.addEventListener("pointerleave", () => {
+      tarjeta.style.setProperty("--ry", "0deg");
+      tarjeta.style.setProperty("--rx", "0deg");
+    });
+  }
+
   function crearTarjeta(p) {
     const li = document.createElement("li");
     const tarjeta = document.createElement("button");
     tarjeta.type = "button";
     tarjeta.className = "tarjeta";
-    tarjeta.dataset.agotado = String(!tieneStock(p));
+    tarjeta.dataset.cursor = "Ver";
+    tarjeta.dataset.id = p.id;
 
-    const figura = document.createElement("div");
-    figura.className = "tarjeta-imagen";
-    figura.innerHTML = imagen(p);
+    const img = document.createElement("img");
+    img.src = p.foto;
+    img.alt = "";
+    img.loading = "lazy";
 
-    const cuerpo = document.createElement("div");
-    cuerpo.className = "tarjeta-cuerpo";
+    const texto = document.createElement("span");
+    texto.className = "tarjeta-texto";
 
-    const categoria = document.createElement("span");
-    categoria.className = "tarjeta-categoria";
-    categoria.textContent = p.categoria;
+    const tipo = document.createElement("span");
+    tipo.className = "tarjeta-tipo";
+    tipo.textContent = estaAgotado(p) ? `${p.tipo}, agotado` : p.tipo;
 
     const nombre = document.createElement("span");
     nombre.className = "tarjeta-nombre";
     nombre.textContent = p.nombre;
+    texto.append(tipo, nombre);
 
-    const valor = document.createElement("span");
-    valor.className = "tarjeta-precio";
-    valor.textContent = precio(p);
+    if (p.precio != null) {
+      const valor = document.createElement("span");
+      valor.className = "tarjeta-precio";
+      valor.textContent = precio(p);
+      texto.append(valor);
+    }
 
-    const talles = document.createElement("span");
-    talles.className = "tarjeta-talles";
-    if (tieneStock(p)) {
+    if (tieneTalles(p)) {
+      const talles = document.createElement("span");
+      talles.className = "tarjeta-talles";
       tallesDe(p).forEach((t) => {
         const talle = document.createElement("span");
         talle.className = "talle";
         talle.textContent = t;
         talle.dataset.estado = p.talles[t];
-        talle.dataset.filtrado = String(t === filtro.talle);
-        talle.title = `Talle ${t}: ${ETIQUETA_ESTADO[p.talles[t]]}`;
         talles.append(talle);
       });
-    } else {
-      const sello = document.createElement("span");
-      sello.className = "sello-agotado";
-      sello.textContent = "Agotado";
-      talles.append(sello);
+      texto.append(talles);
     }
 
     const resumen = tallesDe(p).map((t) => `${t} ${ETIQUETA_ESTADO[p.talles[t]]}`).join(", ");
-    tarjeta.setAttribute("aria-label", `${p.nombre}, ${precio(p)}. Talles: ${resumen}`);
+    tarjeta.setAttribute("aria-label", `${p.nombre}, ${precio(p)}${resumen ? `. Talles: ${resumen}` : ""}`);
 
-    cuerpo.append(categoria, nombre, valor, talles);
-    tarjeta.append(figura, cuerpo);
-    tarjeta.addEventListener("click", () => abrirFicha(p));
+    tarjeta.append(img, texto);
+    tarjeta.addEventListener("click", () => abrirFicha(p, img));
+    inclinar(tarjeta);
     li.append(tarjeta);
     return li;
   }
@@ -164,41 +244,68 @@
     $("resultado").textContent = filtro.talle === null
       ? `${visibles.length} ${palabra}`
       : `${visibles.length} ${palabra} en talle ${filtro.talle}`;
-    $("quitar-talle").hidden = filtro.talle === null;
+    $("quitar-filtros").hidden = visibles.length === 0
+      || (filtro.tipo === "Todos" && !filtro.color && filtro.talle === null && !filtro.texto && !filtro.soloStock);
     pintarPulsados();
   }
 
   function pintarPulsados() {
     document.querySelectorAll("#categorias button").forEach((b) => {
-      b.setAttribute("aria-pressed", String(b.textContent === filtro.categoria));
+      b.setAttribute("aria-pressed", String(b.textContent === filtro.tipo));
     });
-    document.querySelectorAll("#hero-talles button").forEach((b) => {
+    document.querySelectorAll("#colores button").forEach((b) => {
+      b.setAttribute("aria-pressed", String(b.dataset.color === filtro.color));
+    });
+    document.querySelectorAll("#filtro-talles button").forEach((b) => {
       b.setAttribute("aria-pressed", String(Number(b.textContent) === filtro.talle));
     });
   }
 
-  function iniciarFiltros() {
-    ["Todos", ...new Set(productos.map((p) => p.categoria))].forEach((c) => {
-      const b = document.createElement("button");
-      b.type = "button";
-      b.textContent = c;
-      b.addEventListener("click", () => { filtro.categoria = c; pintarCatalogo(); });
-      $("categorias").append(b);
-    });
+  function limpiarFiltros() {
+    Object.assign(filtro, FILTRO_INICIAL);
+    $("buscar").value = "";
+    $("solo-stock").checked = false;
+    pintarCatalogo();
+  }
 
-    [...new Set(productos.flatMap(tallesDe))].sort((a, b) => a - b).forEach((t) => {
+  function iniciarFiltros() {
+    ["Todos", ...new Set(productos.map((p) => p.tipo))].forEach((t) => {
       const b = document.createElement("button");
       b.type = "button";
       b.textContent = t;
-      b.setAttribute("aria-label", `Ver modelos en talle ${t}`);
-      b.addEventListener("click", () => {
-        const yaElegido = filtro.talle === t;
-        filtro.talle = yaElegido ? null : t;
-        pintarCatalogo();
-        if (!yaElegido) $("catalogo").scrollIntoView();
-      });
-      $("hero-talles").append(b);
+      b.addEventListener("click", () => { filtro.tipo = t; pintarCatalogo(); });
+      $("categorias").append(b);
     });
+
+    Object.entries(datos.colores).forEach(([nombre, hex]) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.dataset.color = nombre;
+      b.style.background = hex;
+      b.title = nombre;
+      b.setAttribute("aria-label", `Color ${nombre}`);
+      b.addEventListener("click", () => {
+        filtro.color = filtro.color === nombre ? null : nombre;
+        pintarCatalogo();
+      });
+      $("colores").append(b);
+    });
+
+    if (hayTallesCargados) {
+      $("filtro-stock").hidden = false;
+      $("catalogo-nota").hidden = true;
+      [...new Set(productos.flatMap(tallesDe))].sort((a, b) => a - b).forEach((t) => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.textContent = t;
+        b.setAttribute("aria-label", `Ver modelos en talle ${t}`);
+        b.addEventListener("click", () => {
+          filtro.talle = filtro.talle === t ? null : t;
+          pintarCatalogo();
+        });
+        $("filtro-talles").append(b);
+      });
+    }
 
     $("buscar").addEventListener("input", (e) => {
       filtro.texto = e.target.value.trim().toLowerCase();
@@ -208,25 +315,30 @@
       filtro.soloStock = e.target.checked;
       pintarCatalogo();
     });
-    $("quitar-talle").addEventListener("click", () => { filtro.talle = null; pintarCatalogo(); });
-    $("limpiar").addEventListener("click", () => {
-      Object.assign(filtro, { categoria: "Todos", talle: null, texto: "", soloStock: false });
-      $("buscar").value = "";
-      $("solo-stock").checked = false;
-      pintarCatalogo();
-    });
+    $("limpiar").addEventListener("click", limpiarFiltros);
+    $("quitar-filtros").addEventListener("click", limpiarFiltros);
   }
 
   // Ficha del producto
+  let fichaActual = null;
+  let fotoOrigen = null;
+
   function elegirTalle(p, talle) {
     const enlace = $("ficha-whatsapp");
     document.querySelectorAll("#ficha-talles button").forEach((b) => {
       b.setAttribute("aria-pressed", String(Number(b.textContent) === talle));
     });
+
+    if (!tieneTalles(p)) {
+      enlace.href = enlaceWhatsApp(`Hola, quiero consultar por ${p.nombre}.`);
+      enlace.removeAttribute("aria-disabled");
+      $("ficha-estado").textContent = "Consultanos por los talles disponibles.";
+      return;
+    }
     if (talle === null) {
       enlace.removeAttribute("href");
       enlace.setAttribute("aria-disabled", "true");
-      $("ficha-estado").textContent = tieneStock(p) ? "Elegí un talle para consultar." : "Este modelo está agotado.";
+      $("ficha-estado").textContent = estaAgotado(p) ? "Este modelo está agotado." : "Elegí un talle para consultar.";
       return;
     }
     enlace.href = enlaceWhatsApp(`Hola, quiero consultar por ${p.nombre} en talle ${talle}.`);
@@ -234,12 +346,14 @@
     $("ficha-estado").textContent = p.talles[talle] === "pocos" ? `Quedan los últimos pares en talle ${talle}.` : `Hay stock en talle ${talle}.`;
   }
 
-  function abrirFicha(p) {
-    $("ficha-imagen").innerHTML = imagen(p);
-    $("ficha-categoria").textContent = p.categoria;
+  function cargarFicha(p) {
+    fichaActual = p;
+    $("ficha-foto").src = p.foto;
+    $("ficha-foto").alt = p.nombre;
+    $("ficha-tipo").textContent = p.tipo;
     $("ficha-nombre").textContent = p.nombre;
     $("ficha-precio").textContent = precio(p);
-    $("ficha-descripcion").textContent = p.descripcion || "";
+    $("ficha-stock").hidden = !tieneTalles(p);
 
     const botones = tallesDe(p).map((t) => {
       const b = document.createElement("button");
@@ -255,11 +369,91 @@
 
     const disponible = filtro.talle !== null && p.talles[filtro.talle] && p.talles[filtro.talle] !== "agotado";
     elegirTalle(p, disponible ? filtro.talle : null);
-    $("ficha").showModal();
   }
 
-  $("ficha-cerrar").addEventListener("click", () => $("ficha").close());
-  $("ficha").addEventListener("click", (e) => { if (e.target === $("ficha")) $("ficha").close(); });
+  function abrirFicha(p, foto) {
+    vitrina.detener(60000);
+    fotoOrigen = foto || null;
+    if (fotoOrigen) fotoOrigen.style.viewTransitionName = "foto-activa";
+    transicion(() => {
+      if (fotoOrigen) fotoOrigen.style.viewTransitionName = "";
+      $("ficha-foto").style.viewTransitionName = "foto-activa";
+      cargarFicha(p);
+      $("ficha").showModal();
+    });
+  }
+
+  function cerrarFicha() {
+    const visible = fotoOrigen && fichaActual && fotoOrigen.isConnected
+      && fotoOrigen.closest(".tarjeta").dataset.id === fichaActual.id;
+    if (!visible) $("ficha-foto").style.viewTransitionName = "";
+    transicion(() => {
+      $("ficha-foto").style.viewTransitionName = "";
+      if (visible) fotoOrigen.style.viewTransitionName = "foto-activa";
+      $("ficha").close();
+    });
+    vitrina.detener(0);
+  }
+
+  function pasarFicha(cantidad) {
+    const i = productos.indexOf(fichaActual);
+    cargarFicha(productos[(i + cantidad + productos.length) % productos.length]);
+  }
+
+  function iniciarFicha() {
+    const ficha = $("ficha");
+    $("ficha-cerrar").addEventListener("click", cerrarFicha);
+    $("ficha-anterior").addEventListener("click", () => pasarFicha(-1));
+    $("ficha-siguiente").addEventListener("click", () => pasarFicha(1));
+    ficha.addEventListener("click", (e) => { if (e.target === ficha) cerrarFicha(); });
+    ficha.addEventListener("cancel", (e) => { e.preventDefault(); cerrarFicha(); });
+    ficha.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") pasarFicha(-1);
+      if (e.key === "ArrowRight") pasarFicha(1);
+    });
+    ficha.addEventListener("close", () => {
+      document.querySelectorAll(".tarjeta img").forEach((img) => { img.style.viewTransitionName = ""; });
+    });
+
+    if (punteroFino) {
+      const marco = $("ficha-imagen");
+      const foto = $("ficha-foto");
+      marco.addEventListener("pointerenter", () => { marco.dataset.zoom = "true"; });
+      marco.addEventListener("pointerleave", () => { marco.dataset.zoom = "false"; });
+      marco.addEventListener("pointermove", (e) => {
+        const r = marco.getBoundingClientRect();
+        foto.style.transformOrigin = `${((e.clientX - r.left) / r.width) * 100}% ${((e.clientY - r.top) / r.height) * 100}%`;
+      });
+    }
+  }
+
+  // El cursor sigue al puntero y anuncia la acción de lo que tiene debajo.
+  function iniciarCursor() {
+    if (!punteroFino) return;
+    const cursor = $("cursor");
+    let x = -100, y = -100, cx = -100, cy = -100;
+    addEventListener("pointermove", (e) => {
+      x = e.clientX;
+      y = e.clientY;
+      const objetivo = e.target.closest && e.target.closest("[data-cursor]");
+      cursor.dataset.activo = String(Boolean(objetivo));
+      if (objetivo) $("cursor-texto").textContent = objetivo.dataset.cursor;
+    });
+    addEventListener("scroll", () => { cursor.dataset.activo = "false"; }, { passive: true });
+    (function seguir() {
+      cx += (x - cx) * 0.22;
+      cy += (y - cy) * 0.22;
+      cursor.style.transform = `translate(${cx}px, ${cy}px)`;
+      requestAnimationFrame(seguir);
+    })();
+  }
+
+  // La página pasa a blanco en "Cómo comprar".
+  function iniciarTema() {
+    new IntersectionObserver(([e]) => {
+      document.body.dataset.tema = e.isIntersecting ? "claro" : "oscuro";
+    }, { rootMargin: "-45% 0px -45% 0px" }).observe($("como-comprar"));
+  }
 
   // Contacto
   function iniciarContacto() {
@@ -280,10 +474,11 @@
     });
   }
 
-  $("aviso-pruebas").hidden = !datos.pruebas;
-  $("hero-zapato").innerHTML = silueta("zapato", true);
   $("anio").textContent = new Date().getFullYear();
   iniciarFiltros();
+  iniciarFicha();
+  iniciarCursor();
+  iniciarTema();
   iniciarContacto();
   pintarCatalogo();
 })();
