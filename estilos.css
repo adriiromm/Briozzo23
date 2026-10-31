@@ -440,7 +440,7 @@ body[data-tema="claro"] .marca img { filter: brightness(.5); }
 .vacio p { margin: 6px 0 18px; color: var(--suave); }
 
 /* Pasos */
-#como-comprar { padding-top: 120px; padding-bottom: 40px; }
+#como-comprar { padding-top: 56px; padding-bottom: 72px; }
 .pasos {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -461,7 +461,7 @@ body[data-tema="claro"] .marca img { filter: brightness(.5); }
 .pasos p { color: var(--suave); }
 
 /* Cursos de confección */
-#cursos { padding-top: 56px; padding-bottom: 72px; }
+#cursos { padding-top: 120px; padding-bottom: 40px; }
 .cursos {
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
@@ -641,7 +641,8 @@ body[data-tema="claro"] .marca img { filter: brightness(.5); }
   .tarjeta-texto { padding: 10px 12px 12px; }
   .tarjeta-nombre { font-size: 1.05rem; }
   .pasos, .contacto, .cursos { grid-template-columns: minmax(0, 1fr); }
-  #cursos { padding-top: 40px; padding-bottom: 56px; }
+  #cursos { padding-top: 72px; padding-bottom: 32px; }
+  #como-comprar { padding-top: 40px; padding-bottom: 56px; }
   .buscar { margin-left: 0; flex: 1 1 100%; }
   .buscar input { width: 100%; }
   .ficha[open] { grid-template-columns: minmax(0, 1fr); }

@@ -427,7 +427,7 @@
     }
   }
 
-  // La página pasa a blanco en "Cómo comprar" y "Cursos de confección".
+  // La página pasa a blanco en "Cursos de confección" y "Cómo comprar".
   function iniciarTema() {
     new IntersectionObserver(([e]) => {
       document.body.dataset.tema = e.isIntersecting ? "claro" : "oscuro";

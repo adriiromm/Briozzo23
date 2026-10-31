@@ -3,7 +3,7 @@
 // talles: { 38: "hay", 39: "pocos", 40: "agotado" }. Vacío mientras no estén cargados.
 // luz: color del brillo de fondo en la vitrina.
 window.BRIOZZO = {
-  whatsapp: "", // Solo números, con código de país. Ejemplo: "5491112345678"
+  whatsapp: "5492915744781", // Solo números, con código de país: 2915 74-4781
   instagram: "briozzocalzados", // Solo el usuario, sin @
   direccion: "Aguado 87, Bahía Blanca",
   horarios: "",
