@@ -427,11 +427,18 @@
     }
   }
 
-  // La página pasa a blanco en "Cómo comprar".
+  // La página pasa a blanco en "Cómo comprar" y "Cursos de confección".
   function iniciarTema() {
     new IntersectionObserver(([e]) => {
       document.body.dataset.tema = e.isIntersecting ? "claro" : "oscuro";
-    }, { rootMargin: "-45% 0px -45% 0px" }).observe($("como-comprar"));
+    }, { rootMargin: "-45% 0px -45% 0px" }).observe($("zona-clara"));
+  }
+
+  function iniciarCurso() {
+    $("curso-precio").textContent = datos.cursoPrecio == null
+      ? "Consultanos el valor"
+      : `${datos.moneda} ${datos.cursoPrecio.toLocaleString("es-AR")}`;
+    $("curso-consultar").href = enlaceWhatsApp("Hola, quiero consultar por el curso de confección de calzado.");
   }
 
   // Contacto
@@ -464,6 +471,7 @@
   iniciarFiltros();
   iniciarFicha();
   iniciarTema();
+  iniciarCurso();
   iniciarContacto();
   pintarCatalogo();
 })();

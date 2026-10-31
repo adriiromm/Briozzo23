@@ -440,7 +440,7 @@ body[data-tema="claro"] .marca img { filter: brightness(.5); }
 .vacio p { margin: 6px 0 18px; color: var(--suave); }
 
 /* Pasos */
-#como-comprar { padding-top: 120px; padding-bottom: 60px; }
+#como-comprar { padding-top: 120px; padding-bottom: 40px; }
 .pasos {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -459,6 +459,48 @@ body[data-tema="claro"] .marca img { filter: brightness(.5); }
 }
 .pasos h3 { font: 700 1.4rem/1.2 var(--serif); margin-bottom: 6px; }
 .pasos p { color: var(--suave); }
+
+/* Cursos de confección */
+#cursos { padding-top: 56px; padding-bottom: 72px; }
+.cursos {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: clamp(28px, 5vw, 64px);
+  align-items: start;
+  margin-top: 28px;
+}
+.cursos-texto { display: grid; gap: 14px; max-width: 34em; }
+.cursos-cierre {
+  margin-top: 10px;
+  padding-top: 18px;
+  border-top: 2px solid var(--oro);
+  font: 700 clamp(1.35rem, 2.4vw, 1.75rem)/1.25 var(--serif);
+  color: var(--titulo);
+  transition: color .6s ease;
+}
+.cursos-datos {
+  display: grid;
+  gap: 8px;
+  padding: clamp(20px, 3vw, 30px);
+  background: var(--panel);
+  border: 1px solid var(--linea);
+  border-radius: 16px;
+  transition: background-color .6s ease, border-color .6s ease;
+}
+.cursos-datos h3 { font: 700 1.3rem/1.2 var(--serif); }
+.cursos-datos h3:not(:first-child) { margin-top: 16px; }
+.cursos-precio { font: 700 1.5rem/1.2 var(--serif); color: var(--titulo); transition: color .6s ease; }
+.cursos-notas { display: grid; gap: 4px; color: var(--suave); font-size: 1rem; }
+.cursos-horarios { display: grid; }
+.cursos-horarios div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--linea);
+}
+.cursos-horarios dt { font-weight: 600; }
+.cursos-datos .boton { margin-top: 14px; }
 
 /* Contacto */
 .contacto {
@@ -598,7 +640,8 @@ body[data-tema="claro"] .marca img { filter: brightness(.5); }
   .grilla { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
   .tarjeta-texto { padding: 10px 12px 12px; }
   .tarjeta-nombre { font-size: 1.05rem; }
-  .pasos, .contacto { grid-template-columns: minmax(0, 1fr); }
+  .pasos, .contacto, .cursos { grid-template-columns: minmax(0, 1fr); }
+  #cursos { padding-top: 40px; padding-bottom: 56px; }
   .buscar { margin-left: 0; flex: 1 1 100%; }
   .buscar input { width: 100%; }
   .ficha[open] { grid-template-columns: minmax(0, 1fr); }

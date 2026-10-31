@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="estilos.css?v=7">
+  <link rel="stylesheet" href="estilos.css?v=8">
 </head>
 <body>
   <a class="saltar" href="#catalogo">Ir al catálogo</a>
@@ -24,6 +24,7 @@
     <nav aria-label="Principal">
       <a href="#catalogo">Catálogo</a>
       <a href="#como-comprar">Cómo comprar</a>
+      <a href="#cursos">Cursos</a>
       <a href="#contacto">Contacto</a>
     </nav>
     <a class="boton boton-linea nav-accion" href="#contacto">Consultar</a>
@@ -92,6 +93,7 @@
       </div>
     </section>
 
+    <div id="zona-clara">
     <section class="seccion" id="como-comprar">
       <h2>Cómo comprar</h2>
       <ol class="pasos">
@@ -109,6 +111,36 @@
         </li>
       </ol>
     </section>
+
+    <section class="seccion" id="cursos">
+      <h2>Cursos de confección</h2>
+      <div class="cursos">
+        <div class="cursos-texto">
+          <p>En Taller Briozzo enseñamos el oficio de la confección de calzado de forma práctica y personalizada, en un ambiente cálido donde cada alumno aprende a su ritmo.</p>
+          <p>Se ven diseño, moldería, corte, armado, colocación de suelas y terminaciones.</p>
+          <p>Está dirigido a personas sin experiencia, emprendedores o curiosos que quieran crear su propio calzado.</p>
+          <p>Consultanos por días, horarios, duración, materiales y costos.</p>
+          <p class="cursos-cierre">Aprendé un oficio, desarrollá tu creatividad y hacé realidad el sueño de fabricar tus propios zapatos.</p>
+        </div>
+        <aside class="cursos-datos" aria-label="Valor y horarios del curso">
+          <h3>Valor del curso</h3>
+          <p class="cursos-precio" id="curso-precio"></p>
+          <ul class="cursos-notas">
+            <li>El valor aumenta cada tres meses.</li>
+            <li>Los materiales son aparte.</li>
+            <li>El taller cuenta con herramientas, no es necesario que las compres.</li>
+          </ul>
+          <h3>Horarios</h3>
+          <dl class="cursos-horarios">
+            <div><dt>Jueves</dt><dd>16 a 18</dd></div>
+            <div><dt>Viernes</dt><dd>17:30 a 19:30</dd></div>
+            <div><dt>Sábados</dt><dd>14 a 16 y 16 a 18</dd></div>
+          </dl>
+          <a class="boton boton-oro" id="curso-consultar" target="_blank" rel="noopener">Consultar por el curso</a>
+        </aside>
+      </div>
+    </section>
+    </div>
 
     <section class="seccion" id="contacto">
       <h2>Contacto</h2>
@@ -174,7 +206,7 @@
     </div>
   </dialog>
 
-  <script src="datos.js?v=7"></script>
-  <script src="app.js?v=7"></script>
+  <script src="datos.js?v=8"></script>
+  <script src="app.js?v=8"></script>
 </body>
 </html>
