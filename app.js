@@ -151,6 +151,7 @@
   // Catálogo y filtros
   const FILTRO_INICIAL = { tipo: "Todos", color: null, talle: null, texto: "", soloStock: false };
   const filtro = { ...FILTRO_INICIAL };
+  const catalogo = [...productos].sort((a, b) => datos.tipos.indexOf(a.tipo) - datos.tipos.indexOf(b.tipo));
 
   function coincide(p) {
     if (filtro.tipo !== "Todos" && p.tipo !== filtro.tipo) return false;
@@ -237,7 +238,7 @@
   }
 
   function pintarCatalogo() {
-    const visibles = productos.filter(coincide);
+    const visibles = catalogo.filter(coincide);
     $("grilla").replaceChildren(...visibles.map(crearTarjeta));
     $("vacio").hidden = visibles.length > 0;
     const palabra = visibles.length === 1 ? "modelo" : "modelos";
@@ -269,7 +270,7 @@
   }
 
   function iniciarFiltros() {
-    ["Todos", ...new Set(productos.map((p) => p.tipo))].forEach((t) => {
+    ["Todos", ...datos.tipos].forEach((t) => {
       const b = document.createElement("button");
       b.type = "button";
       b.textContent = t;
@@ -396,8 +397,8 @@
   }
 
   function pasarFicha(cantidad) {
-    const i = productos.indexOf(fichaActual);
-    cargarFicha(productos[(i + cantidad + productos.length) % productos.length]);
+    const i = catalogo.indexOf(fichaActual);
+    cargarFicha(catalogo[(i + cantidad + catalogo.length) % catalogo.length]);
   }
 
   function iniciarFicha() {
