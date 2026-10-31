@@ -5,7 +5,7 @@
 window.BRIOZZO = {
   whatsapp: "", // Solo números, con código de país. Ejemplo: "5491112345678"
   instagram: "briozzocalzados", // Solo el usuario, sin @
-  direccion: "Aguado 87",
+  direccion: "Aguado 87, Bahía Blanca",
   horarios: "",
   moneda: "$",
   colores: {
