@@ -1,9 +1,3 @@
-@property --luz {
-  syntax: "<color>";
-  inherits: true;
-  initial-value: #7a6614;
-}
-
 :root {
   --negro: #000000;
   --blanco: #ffffff;
@@ -167,81 +161,79 @@ body[data-tema="claro"] .marca img { filter: brightness(.6); }
 }
 .flecha:hover { background: var(--oro); color: var(--negro); }
 
-/* Vitrina giratoria */
+/* Portada a pantalla completa con los más vendidos */
 .vitrina {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: calc(100svh - 65px);
-  padding: 20px 16px 22px;
+  height: calc(100svh - 67px);
+  min-height: 460px;
   overflow: hidden;
   background: var(--negro);
 }
-.vitrina-luz {
+.carrusel {
   position: absolute;
   inset: 0;
-  background: radial-gradient(46% 52% at 50% 52%, var(--luz) 0%, transparent 100%);
-  opacity: .75;
-  transition: --luz .9s ease;
-}
-.vitrina-logo { position: relative; z-index: 2; }
-.vitrina-logo img { width: clamp(210px, 25vw, 360px); height: auto; }
-
-.escena {
-  --carta: clamp(180px, min(25vw, 38svh), 330px);
-  position: relative;
-  z-index: 1;
-  display: grid;
-  place-items: center;
-  flex: 1;
-  width: 100%;
-  min-height: calc(var(--carta) + 40px);
-  perspective: 1300px;
+  overflow: hidden;
   cursor: grab;
   touch-action: pan-y;
   user-select: none;
 }
-.escena:active { cursor: grabbing; }
-.escena:focus-visible { outline-offset: -6px; border-radius: 16px; }
-.anillo {
-  position: relative;
-  width: var(--carta);
-  height: var(--carta);
-  transform-style: preserve-3d;
+.carrusel:active { cursor: grabbing; }
+.carrusel:focus-visible { outline-offset: -6px; }
+.pista {
+  display: flex;
+  height: 100%;
+  transition: transform .9s cubic-bezier(.22, .7, .2, 1);
   will-change: transform;
 }
-.carta {
+.diapositiva { flex: 0 0 100%; height: 100%; }
+.diapositiva img { display: block; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+
+/* Sombra arriba y abajo para que el logo y el texto se lean sobre cualquier foto */
+.vitrina::after {
+  content: "";
   position: absolute;
   inset: 0;
-  border-radius: 16px;
-  overflow: hidden;
-  backface-visibility: hidden;
-  box-shadow: 0 0 0 1px rgba(208, 169, 79, .45);
-}
-.carta img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
-
-.piso {
-  position: relative;
   z-index: 1;
-  width: min(70vw, 760px);
-  height: 26px;
-  margin-top: -8px;
-  background: radial-gradient(50% 50% at 50% 50%, rgba(208, 169, 79, .4), transparent 100%);
+  pointer-events: none;
+  background: linear-gradient(rgba(0, 0, 0, .68), transparent 30%, transparent 50%, rgba(0, 0, 0, .86));
 }
+.vitrina-logo { position: absolute; z-index: 2; top: 14px; left: 50%; transform: translateX(-50%); pointer-events: none; }
+.vitrina-logo img { width: clamp(180px, 22vw, 320px); height: auto; }
 
 .vitrina-pie {
-  position: relative;
+  position: absolute;
   z-index: 2;
+  inset: auto clamp(16px, 4vw, 48px) clamp(18px, 4vh, 36px);
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: clamp(14px, 4vw, 40px);
-  width: min(100%, 680px);
-  margin-top: 8px;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  pointer-events: none;
 }
-.vitrina-info { flex: 1; display: grid; justify-items: center; gap: 10px; text-align: center; min-width: 0; }
-.vitrina-nombre { font: 700 clamp(1.3rem, 2.4vw, 1.8rem)/1.15 var(--serif); min-height: 1.15em; }
+.vitrina-info { display: grid; justify-items: start; gap: 8px; min-width: 0; pointer-events: auto; }
+.vitrina-etiqueta { color: var(--oro-claro); font-weight: 600; }
+.vitrina-nombre { font: 700 clamp(1.7rem, 3.6vw, 3rem)/1.08 var(--serif); color: var(--blanco); }
+.vitrina-info .boton { margin-top: 6px; }
+.vitrina-controles { display: flex; align-items: center; gap: 14px; pointer-events: auto; }
+.vitrina-puntos { display: flex; gap: 8px; }
+.vitrina-puntos button {
+  width: 34px;
+  height: 24px;
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.vitrina-puntos button::before {
+  content: "";
+  display: block;
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, .45);
+}
+.vitrina-puntos button[aria-current]::before { background: var(--oro); }
+.vitrina .flecha { background: rgba(0, 0, 0, .4); }
+.vitrina .flecha:hover { background: var(--oro); }
 
 /* Secciones */
 .seccion {
@@ -663,7 +655,10 @@ body[data-tema="claro"] .marca img { filter: brightness(.6); }
     line-height: 1.15;
     text-align: center;
   }
-  .escena { --carta: clamp(170px, min(52vw, 36svh), 300px); perspective: 900px; }
+
+  .vitrina { height: calc(100svh - 125px); }
+  .vitrina-pie { flex-direction: column; align-items: stretch; gap: 14px; }
+  .vitrina-controles { justify-content: space-between; }
   .grilla { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
   .tarjeta-texto { padding: 10px 12px 12px; }
   .tarjeta-nombre { font-size: 1.05rem; }

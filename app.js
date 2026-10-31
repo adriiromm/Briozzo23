@@ -28,126 +28,118 @@
     document.startViewTransition(cambio);
   }
 
-  // Vitrina giratoria
+  // Portada con los más vendidos: las fotos se deslizan en una tira continua.
   const vitrina = (function () {
-    const escena = $("escena");
-    const anillo = $("anillo");
-    const paso = 360 / productos.length;
-    let angulo = 0;
-    let objetivo = 0;
-    let radio = 0;
-    let frente = -1;
-    let enPantalla = true;
+    const INTERVALO = 5000;
+    const carrusel = $("carrusel");
+    const pista = $("pista");
+    const destacados = datos.masVendidos.map((d) => ({ ...productos.find((p) => p.id === d.id), encuadre: d.encuadre }));
+    const total = destacados.length;
+    let posicion = 0;
     let quietoHasta = 0;
+    let enPantalla = true;
+    let arrastre = null;
 
-    const cartas = productos.map((p) => {
-      const carta = document.createElement("div");
-      carta.className = "carta";
+    function crearDiapositiva(p) {
+      const diapositiva = document.createElement("div");
+      diapositiva.className = "diapositiva";
       const img = document.createElement("img");
       img.src = p.foto;
       img.alt = "";
       img.draggable = false;
-      carta.append(img);
-      anillo.append(carta);
-      return carta;
-    });
-
-    function colocar() {
-      const ancho = cartas[0].offsetWidth;
-      radio = Math.round((ancho / 2 / Math.tan(Math.PI / productos.length)) * 1.14);
-      cartas.forEach((c, i) => { c.style.transform = `rotateY(${i * paso}deg) translateZ(${radio}px)`; });
+      img.style.objectPosition = p.encuadre;
+      diapositiva.append(img);
+      return diapositiva;
     }
 
-    const indiceDelFrente = () => {
-      const i = Math.round(-angulo / paso) % productos.length;
-      return (i + productos.length) % productos.length;
-    };
+    // Una copia en cada punta permite seguir en la misma dirección al dar la vuelta.
+    pista.append(crearDiapositiva(destacados[total - 1]), ...destacados.map(crearDiapositiva), crearDiapositiva(destacados[0]));
+
+    const puntos = destacados.map((p, i) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.setAttribute("aria-label", `Ver ${p.nombre}`);
+      b.addEventListener("click", () => { detener(8000); ir(i); });
+      $("vitrina-puntos").append(b);
+      return b;
+    });
+
+    const indice = () => (posicion + total) % total;
+
+    function colocar(animado, desplazamiento = 0) {
+      pista.style.transition = animado ? "" : "none";
+      pista.style.transform = `translate3d(calc(${-(posicion + 1) * 100}% + ${desplazamiento}px), 0, 0)`;
+    }
 
     function pintar() {
-      anillo.style.transform = `translateZ(${-radio}px) rotateY(${angulo}deg)`;
-      cartas.forEach((c, i) => {
-        const cercania = Math.max(0, Math.cos(((i * paso + angulo) * Math.PI) / 180));
-        c.style.filter = `brightness(${(0.22 + 0.78 * cercania ** 2).toFixed(3)})`;
+      $("vitrina-nombre").textContent = destacados[indice()].nombre;
+      puntos.forEach((b, i) => {
+        if (i === indice()) b.setAttribute("aria-current", "true");
+        else b.removeAttribute("aria-current");
       });
-      const actual = indiceDelFrente();
-      if (actual !== frente) {
-        frente = actual;
-        $("vitrina-nombre").textContent = productos[frente].nombre;
-        $("vitrina-luz").style.setProperty("--luz", productos[frente].luz);
-      }
     }
 
-    function cuadro(ahora) {
-      if (enPantalla) {
-        if (!movimientoReducido && ahora > quietoHasta) objetivo -= 0.05;
-        angulo += (objetivo - angulo) * 0.09;
-        pintar();
-      }
-      requestAnimationFrame(cuadro);
+    // Vuelve de una copia a la foto real sin que se note.
+    function normalizar() {
+      if (posicion >= 0 && posicion < total) return;
+      posicion = indice();
+      colocar(false);
+      void pista.offsetWidth;
     }
 
+    function ir(destino) {
+      normalizar();
+      posicion = destino;
+      colocar(true);
+      pintar();
+    }
+
+    const mover = (cantidad) => { normalizar(); ir(posicion + cantidad); };
     function detener(ms) { quietoHasta = performance.now() + ms; }
-    function alinear() { objetivo = Math.round(objetivo / paso) * paso; }
-    function mover(cantidad) { detener(7000); alinear(); objetivo -= cantidad * paso; }
 
-    function irA(i) {
-      detener(7000);
-      const destino = -i * paso;
-      const vueltas = Math.round((objetivo - destino) / 360);
-      objetivo = destino + vueltas * 360;
-    }
+    pista.addEventListener("transitionend", normalizar);
+
+    setInterval(() => {
+      if (enPantalla && !document.hidden && !arrastre && performance.now() > quietoHasta) mover(1);
+    }, INTERVALO);
 
     // Arrastre con mouse o dedo
-    let inicio = null;
-    escena.addEventListener("pointerdown", (e) => {
-      inicio = { x: e.clientX, y: e.clientY, ultimo: e.clientX, movido: false };
-      escena.setPointerCapture(e.pointerId);
-      detener(7000);
+    carrusel.addEventListener("pointerdown", (e) => {
+      normalizar();
+      arrastre = { x: e.clientX, dx: 0 };
+      carrusel.setPointerCapture(e.pointerId);
     });
-    escena.addEventListener("pointermove", (e) => {
-      if (!inicio) return;
-      const dx = e.clientX - inicio.ultimo;
-      inicio.ultimo = e.clientX;
-      if (Math.abs(e.clientX - inicio.x) > 6) inicio.movido = true;
-      objetivo += dx * 0.22;
-      detener(7000);
+    carrusel.addEventListener("pointermove", (e) => {
+      if (!arrastre) return;
+      arrastre.dx = e.clientX - arrastre.x;
+      colocar(false, arrastre.dx);
     });
     function soltar(e) {
-      if (!inicio) return;
-      const fueClic = !inicio.movido;
-      inicio = null;
-      if (!fueClic) { alinear(); return; }
-      if (e.type !== "pointerup") return;
-      const elemento = document.elementFromPoint(e.clientX, e.clientY);
-      const carta = elemento && elemento.closest(".carta");
-      if (!carta) return;
-      const i = cartas.indexOf(carta);
-      if (i === frente) abrirFicha(productos[i]);
-      else irA(i);
+      if (!arrastre) return;
+      const { dx } = arrastre;
+      arrastre = null;
+      detener(8000);
+      if (Math.abs(dx) > carrusel.offsetWidth * 0.12) { mover(dx < 0 ? 1 : -1); return; }
+      colocar(true);
+      if (e.type === "pointerup" && Math.abs(dx) < 6) abrirFicha(destacados[indice()]);
     }
-    escena.addEventListener("pointerup", soltar);
-    escena.addEventListener("pointercancel", soltar);
+    carrusel.addEventListener("pointerup", soltar);
+    carrusel.addEventListener("pointercancel", soltar);
 
-    escena.addEventListener("keydown", (e) => {
-      if (e.key === "ArrowLeft") { mover(-1); e.preventDefault(); }
-      if (e.key === "ArrowRight") { mover(1); e.preventDefault(); }
-      if (e.key === "Enter") abrirFicha(productos[frente]);
+    carrusel.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") { detener(8000); mover(-1); e.preventDefault(); }
+      if (e.key === "ArrowRight") { detener(8000); mover(1); e.preventDefault(); }
+      if (e.key === "Enter") abrirFicha(destacados[indice()]);
     });
-    escena.addEventListener("focus", () => detener(60000));
 
-    $("vitrina-anterior").addEventListener("click", () => mover(-1));
-    $("vitrina-siguiente").addEventListener("click", () => mover(1));
-    $("vitrina-ver").addEventListener("click", () => abrirFicha(productos[frente]));
+    $("vitrina-anterior").addEventListener("click", () => { detener(8000); mover(-1); });
+    $("vitrina-siguiente").addEventListener("click", () => { detener(8000); mover(1); });
+    $("vitrina-ver").addEventListener("click", () => abrirFicha(destacados[indice()]));
 
-    new IntersectionObserver(([e]) => {
-      enPantalla = e.isIntersecting;
-      if (enPantalla) colocar();
-    }).observe(escena);
-    addEventListener("resize", colocar);
+    new IntersectionObserver(([e]) => { enPantalla = e.isIntersecting; }).observe(carrusel);
 
-    colocar();
+    colocar(false);
     pintar();
-    requestAnimationFrame(cuadro);
     return { detener };
   })();
 
@@ -452,7 +444,7 @@
       scrollTo({ top: 0, behavior: "instant" });
 
       if (!primeraVez) {
-        const destino = actual === paginas[0] ? $("escena") : titulo;
+        const destino = actual === paginas[0] ? $("carrusel") : titulo;
         if (actual !== paginas[0]) titulo.tabIndex = -1;
         destino.focus({ preventScroll: true });
       }

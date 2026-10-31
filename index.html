@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="estilos.css?v=16">
+  <link rel="stylesheet" href="estilos.css?v=17">
 </head>
 <body>
   <a class="saltar" href="#catalogo">Ir al catálogo</a>
@@ -31,22 +31,24 @@
 
   <main>
     <section class="vitrina" id="inicio">
-      <div class="vitrina-luz" id="vitrina-luz"></div>
       <h1 class="vitrina-logo"><img src="marca/logo.png" alt="Briozzo Calzados"></h1>
 
-      <div class="escena" id="escena" tabindex="0" role="group"
-           aria-label="Vitrina de modelos. Usá las flechas para girarla y Enter para ver el modelo.">
-        <div class="anillo" id="anillo"></div>
+      <div class="carrusel" id="carrusel" tabindex="0" role="group"
+           aria-label="Los más vendidos. Usá las flechas para cambiar de modelo y Enter para verlo.">
+        <div class="pista" id="pista"></div>
       </div>
-      <div class="piso" aria-hidden="true"></div>
 
       <div class="vitrina-pie">
-        <button class="flecha" type="button" id="vitrina-anterior" aria-label="Modelo anterior">‹</button>
         <div class="vitrina-info">
+          <p class="vitrina-etiqueta">Los más vendidos</p>
           <p class="vitrina-nombre" id="vitrina-nombre"></p>
           <button class="boton boton-oro" type="button" id="vitrina-ver">Ver este modelo</button>
         </div>
-        <button class="flecha" type="button" id="vitrina-siguiente" aria-label="Modelo siguiente">›</button>
+        <div class="vitrina-controles">
+          <button class="flecha" type="button" id="vitrina-anterior" aria-label="Modelo anterior">‹</button>
+          <div class="vitrina-puntos" id="vitrina-puntos"></div>
+          <button class="flecha" type="button" id="vitrina-siguiente" aria-label="Modelo siguiente">›</button>
+        </div>
       </div>
     </section>
 
@@ -202,7 +204,7 @@
     </div>
   </dialog>
 
-  <script src="datos.js?v=16"></script>
-  <script src="app.js?v=16"></script>
+  <script src="datos.js?v=17"></script>
+  <script src="app.js?v=17"></script>
 </body>
 </html>
