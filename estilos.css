@@ -635,7 +635,6 @@ body[data-tema="claro"] .marca img { filter: brightness(.5); }
 
 @media (max-width: 860px) {
   .nav nav { display: none; }
-  .nav-accion { margin-left: auto; }
   .escena { --carta: clamp(170px, min(52vw, 36svh), 300px); perspective: 900px; }
   .grilla { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
   .tarjeta-texto { padding: 10px 12px 12px; }
