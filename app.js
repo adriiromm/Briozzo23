@@ -187,7 +187,6 @@
     const tarjeta = document.createElement("button");
     tarjeta.type = "button";
     tarjeta.className = "tarjeta";
-    tarjeta.dataset.cursor = "Ver";
     tarjeta.dataset.id = p.id;
 
     const img = document.createElement("img");
@@ -428,27 +427,6 @@
     }
   }
 
-  // El cursor sigue al puntero y anuncia la acción de lo que tiene debajo.
-  function iniciarCursor() {
-    if (!punteroFino) return;
-    const cursor = $("cursor");
-    let x = -100, y = -100, cx = -100, cy = -100;
-    addEventListener("pointermove", (e) => {
-      x = e.clientX;
-      y = e.clientY;
-      const objetivo = e.target.closest && e.target.closest("[data-cursor]");
-      cursor.dataset.activo = String(Boolean(objetivo));
-      if (objetivo) $("cursor-texto").textContent = objetivo.dataset.cursor;
-    });
-    addEventListener("scroll", () => { cursor.dataset.activo = "false"; }, { passive: true });
-    (function seguir() {
-      cx += (x - cx) * 0.22;
-      cy += (y - cy) * 0.22;
-      cursor.style.transform = `translate(${cx}px, ${cy}px)`;
-      requestAnimationFrame(seguir);
-    })();
-  }
-
   // La página pasa a blanco en "Cómo comprar".
   function iniciarTema() {
     new IntersectionObserver(([e]) => {
@@ -485,7 +463,6 @@
   $("anio").textContent = new Date().getFullYear();
   iniciarFiltros();
   iniciarFicha();
-  iniciarCursor();
   iniciarTema();
   iniciarContacto();
   pintarCatalogo();

@@ -96,40 +96,6 @@ button, input, textarea { font: inherit; color: inherit; }
 @keyframes telon-logo { to { clip-path: inset(0 0 0 0); } }
 @keyframes telon-subir { to { transform: translateY(-100%); visibility: hidden; } }
 
-/* Cursor que acompaña al puntero */
-.cursor {
-  position: fixed;
-  left: 0;
-  top: 0;
-  z-index: 40;
-  display: none;
-  place-items: center;
-  width: 14px;
-  height: 14px;
-  margin: -7px 0 0 -7px;
-  border: 1px solid var(--oro);
-  border-radius: 50%;
-  pointer-events: none;
-  transform: translate(-100px, -100px);
-  transition: width .25s, height .25s, margin .25s, background-color .25s;
-}
-.cursor span {
-  color: var(--negro);
-  font-size: .85rem;
-  font-weight: 600;
-  opacity: 0;
-}
-.cursor[data-activo="true"] {
-  width: 74px;
-  height: 74px;
-  margin: -37px 0 0 -37px;
-  background: var(--oro);
-}
-.cursor[data-activo="true"] span { opacity: 1; }
-@media (hover: hover) and (pointer: fine) {
-  .cursor { display: grid; }
-}
-
 /* Navegación */
 .nav {
   position: sticky;
