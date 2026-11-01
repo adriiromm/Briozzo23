@@ -1,4 +1,5 @@
 // Abre la web de Briozzo Calzados en una ventana propia, sin barra de direcciones.
+// Compilado con /define:PANEL abre la dashboard en una ventana del tamaño de un celular.
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -7,7 +8,15 @@ using System.Windows.Forms;
 
 static class BriozzoCalzados
 {
+#if PANEL
+    const string Nombre = "Panel Briozzo";
+    const string Web = "https://adriiromm.github.io/Briozzo23/panel/";
+    const string Ventana = "430,880";
+#else
+    const string Nombre = "Briozzo Calzados";
     const string Web = "https://adriiromm.github.io/Briozzo23/";
+    const string Ventana = "1280,800";
+#endif
 
     [STAThread]
     static void Main()
@@ -15,8 +24,8 @@ static class BriozzoCalzados
         if (!HayConexion())
         {
             MessageBox.Show(
-                "Briozzo Calzados necesita internet para abrirse. Revisá tu conexión y volvé a intentar.",
-                "Briozzo Calzados", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Nombre + " necesita internet para abrirse. Revisá tu conexión y volvé a intentar.",
+                Nombre, MessageBoxButtons.OK, MessageBoxIcon.Information);
             return;
         }
 
@@ -27,7 +36,7 @@ static class BriozzoCalzados
             return;
         }
 
-        Process.Start(navegador, "--app=" + Web + " --window-size=1280,800");
+        Process.Start(navegador, "--app=" + Web + " --window-size=" + Ventana);
     }
 
     static bool HayConexion()
@@ -40,9 +49,10 @@ static class BriozzoCalzados
             pedido.Timeout = 6000;
             using (pedido.GetResponse()) return true;
         }
-        catch (WebException)
+        catch (WebException e)
         {
-            return false;
+            // Si el servidor respondió, aunque sea con un error, hay internet.
+            return e.Response != null;
         }
     }
 
